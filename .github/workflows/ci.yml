@@ -68,12 +68,12 @@ jobs:
   # TODO: Uncomment and configure once artagon-workflows rust_ci.yml is available
   # test-default:
   #   name: Test Default Configuration
-  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@main
+  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@feature/update-cache-and-sync-ci
   #   secrets: inherit
   #
   # test-stable:
   #   name: Test Stable Rust
-  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@main
+  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@feature/update-cache-and-sync-ci
   #   with:
   #     rust-version: 'stable'
   #     run-tests: true
@@ -81,7 +81,7 @@ jobs:
   #
   # test-nightly:
   #   name: Test Nightly Rust
-  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@main
+  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@feature/update-cache-and-sync-ci
   #   with:
   #     rust-version: 'nightly'
   #     run-tests: true

@@ -1,0 +1,88 @@
+# Rust CI Test Workflow
+#
+# This workflow will test the artagon-workflows Rust CI reusable workflow.
+# Currently, no Rust workflow exists in artagon-workflows, so this is a placeholder.
+#
+# TODO: Activate this workflow once artagon-workflows adds a Rust CI workflow
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Run daily at 2 AM UTC to catch any breaking changes in artagon-workflows
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      rust-version:
+        description: 'Rust version to test'
+        required: false
+        default: 'stable'
+  repository_dispatch:
+    types: [workflow-updated, release-published]
+
+jobs:
+  # Placeholder job - tests basic Rust build
+  # TODO: Replace with reusable workflow call once rust_ci.yml is available
+  test-local:
+    name: Test Local Build (Placeholder)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@7b1c307e0dcbda6122208f10795a713336a9b35a
+        with:
+          toolchain: ${{ inputs.rust-version || 'stable' }}
+
+      - name: Cache Cargo
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: cargo-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            cargo-${{ runner.os }}-
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Run rustfmt check
+        run: cargo fmt -- --check
+
+  # TODO: Uncomment and configure once artagon-workflows rust_ci.yml is available
+  # test-default:
+  #   name: Test Default Configuration
+  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@main
+  #   secrets: inherit
+  #
+  # test-stable:
+  #   name: Test Stable Rust
+  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@main
+  #   with:
+  #     rust-version: 'stable'
+  #     run-tests: true
+  #   secrets: inherit
+  #
+  # test-nightly:
+  #   name: Test Nightly Rust
+  #   uses: artagon/artagon-workflows/.github/workflows/rust_ci.yml@main
+  #   with:
+  #     rust-version: 'nightly'
+  #     run-tests: true
+  #   secrets: inherit
